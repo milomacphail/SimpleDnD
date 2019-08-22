@@ -91,16 +91,30 @@ namespace SimpleDnD
 
         class DamageDice
         {
+            Random damageRand = new Random();
             int numberOfDice;
+            int dieResult;
             int sidedDice;
-            public void DamageToEnemy()
+            int damageDone;
+            int totalDamage;
+            public int DamageToEnemy()
             {
                 Console.WriteLine("What dice are you using: ");
                 string diceClass = Console.ReadLine();
                 numberOfDice = Int32.Parse(diceClass.Substring(0, 1));
                 sidedDice = Int32.Parse(diceClass.Substring(2, 1));
-            }
+                Console.WriteLine("{0}, {1}", numberOfDice, sidedDice);
 
+                for (int roll = 0; roll < numberOfDice; roll++)
+                {
+                    damageDone = damageRand.Next(1, sidedDice);
+                    Console.WriteLine(damageDone);
+                    totalDamage += damageDone;
+                    Console.WriteLine(totalDamage);
+                }
+
+                return totalDamage;
+            }
 
         }
 
