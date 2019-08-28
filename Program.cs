@@ -5,11 +5,11 @@ namespace SimpleDnD
     class Dice
     {
         Random rand = new Random();
-        int value;
+        private int _value;
 
         public Dice()
         {
-            this.value = this.RollDice();
+            this._value = this.RollDice();
         }
 
         public int RollDice()
@@ -22,9 +22,12 @@ namespace SimpleDnD
             }
             else if (dieResult == 20)
             {
-                Console.WriteLine("A Critical Hit!");
+                Console.WriteLine("{0}! A Critical Hit!", dieResult);
             }
-
+            else
+            {
+                Console.WriteLine("You rolled a {0}. That's a hit!", dieResult );
+            }
             return dieResult;
         }
 
@@ -44,87 +47,90 @@ namespace SimpleDnD
             int modifier = Convert.ToInt32(Console.ReadLine());
             return modifier;
         }
+    }
 
-        class ArmorClass
+    class ArmorClass
+    {
+        private int _armorValue;
+
+        public ArmorClass()
         {
-            private int _armorValue;
-
-            public ArmorClass()
-            {
-                this._armorValue = this.EnterArmorClass();
-            }
-
-            public int EnterArmorClass()
-            {
-                Console.WriteLine("Dungeon Master, enter enemy armor class: ");
-                int ac = Convert.ToInt32(Console.ReadLine());
-                return ac;
-            }
-
+            this._armorValue = this.EnterArmorClass();
         }
 
-        class Hit
+        public int EnterArmorClass()
         {
-            public bool IsHit()
-            {
-                bool isHit;
-                Dice gameRoll = new Dice();
-                Modifier gameModifier = new Modifier();
-                int playerRoll = (gameRoll.RollDice() + gameModifier.EnterModifier());
-                ArmorClass enemyArmor = new ArmorClass();
-                int enemyGameArmor = enemyArmor.EnterArmorClass();
-
-                if (enemyGameArmor > playerRoll)
-                {
-                    isHit = true;
-                    Console.WriteLine("You hit the enemy!");
-                }
-                else
-                {
-                    isHit = false;
-                    Console.WriteLine("You missed! Great effort.");
-                }
-
-                return isHit;
-            }
+            Console.WriteLine("Dungeon Master, enter enemy armor class: ");
+            int ac = Convert.ToInt32(Console.ReadLine());
+            return ac;
         }
 
-        class DamageDice
+    }
+
+    class Hit
+    {
+        public bool IsHit()
         {
-            Random damageRand = new Random();
-            int numberOfDice;
-            int dieResult;
-            int sidedDice;
-            int damageDone;
-            int totalDamage;
-            public int DamageToEnemy()
+            bool isHit;
+            Dice gameRoll = new Dice();
+            int hitResult = gameRoll.RollDice();
+            Console.WriteLine(hitResult);
+            Modifier gameModifier = new Modifier();
+            int playerRoll = (hitResult + gameModifier.EnterModifier());
+            ArmorClass enemyArmor = new ArmorClass();
+            int enemyGameArmor = enemyArmor.EnterArmorClass();
+
+            if (enemyGameArmor > playerRoll)
             {
-                Console.WriteLine("What dice are you using: ");
-                string diceClass = Console.ReadLine();
-                numberOfDice = Int32.Parse(diceClass.Substring(0, 1));
-                sidedDice = Int32.Parse(diceClass.Substring(2, 1));
-                Console.WriteLine("{0}, {1}", numberOfDice, sidedDice);
-
-                for (int roll = 0; roll < numberOfDice; roll++)
-                {
-                    damageDone = damageRand.Next(1, sidedDice);
-                    Console.WriteLine(damageDone);
-                    totalDamage += damageDone;
-                    Console.WriteLine(totalDamage);
-                }
-
-                return totalDamage;
+                isHit = true;
+                Console.WriteLine("You hit the enemy!");
+            }
+            else
+            {
+                isHit = false;
+                Console.WriteLine("You missed! Great effort.");
             }
 
+            return isHit;
+        }
+    }
+
+    class DamageDice : Hit
+    {
+        Random damageRand = new Random();
+        int numberOfDice;
+        int sidedDice;
+        int totalDamage;
+        public int DamageToEnemy()
+        {
+            Console.WriteLine("What dice are you using: ");
+            string diceClass = Console.ReadLine();
+            numberOfDice = Int32.Parse(diceClass.Substring(0, 1));
+            sidedDice = Int32.Parse(diceClass.Substring(2, 1));
+
+            for (int roll = 0; roll < numberOfDice; roll++)
+            {
+                int damageDone = damageRand.Next(1, sidedDice);
+                Console.WriteLine("{0} damage to enemy", damageDone);
+                totalDamage += damageDone;
+                Console.WriteLine("Damage to enemy: {0}", totalDamage);
+
+            }
+
+            return totalDamage;
         }
 
-        class Program
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
         {
-            static void Main(string[] args)
-            {
-                DamageDice rollDamage = new DamageDice();
-                rollDamage.DamageToEnemy();
-            }
+            Hit attackEnemy = new Hit();
+            attackEnemy.IsHit();
+            DamageDice damageToEnemy = new DamageDice();
+            damageToEnemy.DamageToEnemy();
         }
     }
 }
+
