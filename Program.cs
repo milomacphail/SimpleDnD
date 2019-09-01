@@ -6,15 +6,16 @@ namespace SimpleDnD
     {
         Random rand = new Random();
         private int _value;
+        public int dieResult;
 
         public Dice()
         {
-            this._value = this.RollDice();
+            this._value = dieResult;
         }
 
         public int RollDice()
         {
-            int dieResult = rand.Next(1, 20);
+            dieResult = rand.Next(1, 21);
 
             if (dieResult == 1)
             {
@@ -36,33 +37,48 @@ namespace SimpleDnD
     class Modifier
     {
         private int _modifierValue;
+        int modifier;
         public Modifier()
         {
-            this._modifierValue = this.EnterModifier();
+            this._modifierValue = modifier;
         }
 
         public int EnterModifier()
         {
             Console.WriteLine("Dungeon Master, enter a modifier: ");
-            int modifier = Convert.ToInt32(Console.ReadLine());
+            modifier = Convert.ToInt32(Console.ReadLine());
             return modifier;
         }
+    }
+
+    
+    class Enemy
+    {
+        private int  _hitPoints;
+        int enemyHitPoints;
+
+        public Enemy()
+        {
+            this._hitPoints = enemyHitPoints;
+        }
+
     }
 
     class ArmorClass
     {
         private int _armorValue;
+        public int targetArmor;
 
         public ArmorClass()
         {
-            this._armorValue = this.EnterArmorClass();
+            this._armorValue = targetArmor;
         }
 
         public int EnterArmorClass()
         {
             Console.WriteLine("Dungeon Master, enter enemy armor class: ");
-            int ac = Convert.ToInt32(Console.ReadLine());
-            return ac;
+            targetArmor = Convert.ToInt32(Console.ReadLine());
+            return targetArmor;
         }
 
     }
@@ -76,7 +92,8 @@ namespace SimpleDnD
             int hitResult = gameRoll.RollDice();
             Console.WriteLine(hitResult);
             Modifier gameModifier = new Modifier();
-            int playerRoll = (hitResult + gameModifier.EnterModifier());
+            int modRoll = gameModifier.EnterModifier();
+            int playerRoll = (hitResult + modRoll);
             ArmorClass enemyArmor = new ArmorClass();
             int enemyGameArmor = enemyArmor.EnterArmorClass();
 
@@ -110,10 +127,9 @@ namespace SimpleDnD
 
             for (int roll = 0; roll < numberOfDice; roll++)
             {
-                int damageDone = damageRand.Next(1, sidedDice);
+                int damageDone = damageRand.Next(1, sidedDice + 1);
                 Console.WriteLine("{0} damage to enemy", damageDone);
                 totalDamage += damageDone;
-                Console.WriteLine("Damage to enemy: {0}", totalDamage);
 
             }
 
