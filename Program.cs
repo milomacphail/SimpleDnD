@@ -52,16 +52,21 @@ namespace SimpleDnD
     }
 
     
-    class Enemy
+    public class Enemy
     {
-        private int  _hitPoints;
-        int enemyHitPoints;
+            private enum  _enemyGenerator { Kobold = 0, Gelatinous_Cube = 1, Mind_FLayer = 2, Red_Dragon = 3 };
+            Array enemies = Enum.GetValues(typeof(_enemyGenerator));
+            _enemyGenerator randomEnemyGenerator = (_enemyGenerator)(new Random()).Next(0, 3);
+            Dice hitPoints = new Dice();
 
-        public Enemy()
-        {
-            this._hitPoints = enemyHitPoints;
-        }
+            public int EnemyHP;
+            public string EnemyType;
 
+            public Enemy()
+            {
+                this.EnemyType = 
+                this._hitPoints = enemyHP;
+            }
     }
 
     class ArmorClass
